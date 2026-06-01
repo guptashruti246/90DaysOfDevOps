@@ -1,35 +1,40 @@
-````md
 # Linux Architecture, Processes, and systemd
 
 ## 1. Core Components of Linux
 
 ### Kernel
-- The **core of Linux** that interacts directly with hardware.
-- Responsible for:
-  - CPU management
-  - Memory management
-  - Device management
-  - Process management
-- Acts as a bridge between hardware and applications.
+
+* The **core of Linux** that interacts directly with hardware.
+* Responsible for:
+
+  * CPU management
+  * Memory management
+  * Device management
+  * Process management
+* Acts as a bridge between hardware and applications.
 
 ### User Space
-- Area where users and applications run.
-- Commands like `ls`, `top`, `vim`, and applications run here.
-- Cannot directly access hardware; requests go through the kernel.
+
+* Area where users and applications run.
+* Commands like `ls`, `top`, `vim`, and applications run here.
+* Cannot directly access hardware; requests go through the kernel.
 
 ### Init / systemd
-- First process started during Linux boot.
-- Has **PID 1**.
-- Responsible for:
-  - Starting services
-  - Managing processes
-  - Handling boot process
+
+* First process started during Linux boot.
+* Has **PID 1**.
+* Responsible for:
+
+  * Starting services
+  * Managing processes
+  * Handling boot process
 
 Examples of services:
-- nginx
-- docker
-- sshd
-- mariadb
+
+* nginx
+* docker
+* sshd
+* mariadb
 
 ---
 
@@ -40,9 +45,9 @@ A **process** is a running instance of a program.
 Example:
 When a command is executed:
 
-```bash
+```bash id="ic9slg"
 ls
-````
+```
 
 Linux creates a process to run it.
 
@@ -52,7 +57,7 @@ Linux creates a process to run it.
 * Every process has a unique **PID (Process ID)**.
 * To view running processes:
 
-```bash
+```bash id="eqn2vb"
 ps -ef
 ```
 
@@ -88,9 +93,9 @@ It helps:
 * Monitor failed services
 * Manage logs
 
-Common commands:
+### Common Commands
 
-```bash
+```bash id="pqbrmp"
 systemctl status nginx
 systemctl start docker
 systemctl stop mariadb
@@ -111,31 +116,31 @@ Understanding `systemd` helps:
 
 ### Check running processes
 
-```bash
+```bash id="8h2j4m"
 ps -ef
 ```
 
 ### Monitor CPU and memory
 
-```bash
+```bash id="6iyxry"
 top
 ```
 
 ### Check service status
 
-```bash
+```bash id="k0s4l8"
 systemctl status <service>
 ```
 
 ### View system logs
 
-```bash
+```bash id="j0cfyy"
 journalctl -xe
 ```
 
 ### Kill a process
 
-```bash
+```bash id="vduzux"
 kill <PID>
 ```
 
@@ -144,6 +149,3 @@ kill <PID>
 ## Summary
 
 Linux works using the **kernel, user space, and systemd**. Understanding processes and services helps troubleshoot issues faster and is essential for DevOps and system administration.
-
-```
-```
