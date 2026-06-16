@@ -2,39 +2,43 @@
 
 ## Overview
 
-Today, I learned the fundamentals of Docker and containers. I explored how containers work, how they differ from Virtual Machines, and practiced running different containers using Docker.
+Today, I learned the fundamentals of Docker and containers. I explored how containers work, how they differ from Virtual Machines (VMs), and practiced running different containers using Docker.
 
 ---
 
-## Task 1: What is Docker?
+# Task 1: What is Docker?
 
-### What is a Container and Why Do We Need It?
+## What is a Container and Why Do We Need It?
 
-A container is a lightweight, portable environment that packages an application along with all its dependencies, libraries, and configurations.
+A container is a lightweight and portable environment that packages an application along with all its dependencies, libraries, and configurations.
 
 Containers are needed because applications often behave differently across environments. For example, an application may work on one machine but fail on another due to missing dependencies or version conflicts.
 
-Docker containers solve this issue by ensuring the application runs consistently across different environments.
+Docker containers solve this issue by ensuring applications run consistently across development, testing, and production environments.
 
-### Containers vs Virtual Machines (VMs)
+---
+
+## Containers vs Virtual Machines (VMs)
 
 | Containers                       | Virtual Machines               |
 | -------------------------------- | ------------------------------ |
 | Lightweight                      | Heavyweight                    |
-| Share the host OS kernel         | Have a full operating system   |
-| Faster startup time              | Slower startup time            |
-| Use fewer resources              | Consume more CPU/RAM           |
+| Share host OS kernel             | Have a full OS                 |
+| Faster startup                   | Slower startup                 |
+| Use fewer resources              | Use more CPU/RAM               |
 | Best for microservices and CI/CD | Best for complete OS isolation |
 
-### Docker Architecture
+---
+
+## Docker Architecture
 
 Docker follows a client-server architecture.
 
-**Main Components:**
+### Components of Docker Architecture
 
-#### 1. Docker Client
+### 1. Docker Client
 
-The Docker client is where users run Docker commands like:
+The Docker client is where users run Docker commands such as:
 
 ```bash
 docker run
@@ -44,11 +48,16 @@ docker images
 
 The client communicates with the Docker daemon.
 
-#### 2. Docker Daemon
+### 2. Docker Daemon
 
-The Docker daemon (`dockerd`) is the background service that manages Docker objects such as containers, images, and networks.
+The Docker daemon (`dockerd`) is the background service that manages Docker objects such as:
 
-#### 3. Docker Images
+* Containers
+* Images
+* Networks
+* Volumes
+
+### 3. Docker Images
 
 Docker images are read-only templates used to create containers.
 
@@ -58,23 +67,23 @@ Examples:
 * ubuntu
 * mysql
 
-#### 4. Docker Containers
+### 4. Docker Containers
 
 Containers are running instances of Docker images.
 
-Example:
+For example, running an Nginx image creates an Nginx web server container.
 
-* Running an Nginx container creates a working web server instance.
-
-#### 5. Docker Registry
+### 5. Docker Registry
 
 A Docker registry stores Docker images.
 
 Example:
 
-* Docker Hub is the default public registry where Docker downloads images from.
+* Docker Hub (default public registry)
 
-### Docker Architecture Flow (My Understanding)
+---
+
+## Docker Architecture Flow
 
 ```text
 User
@@ -90,9 +99,9 @@ Creates and Runs Containers
 
 ---
 
-## Task 2: Install Docker
+# Task 2: Install Docker
 
-### Verify Docker Installation
+## Verify Docker Installation
 
 Command used:
 
@@ -100,7 +109,7 @@ Command used:
 docker --version
 ```
 
-### Run Hello World Container
+## Run Hello World Container
 
 Command used:
 
@@ -108,18 +117,18 @@ Command used:
 docker run hello-world
 ```
 
-**What happened?**
+### What Happened?
 
-1. Docker checked if the image existed locally.
+1. Docker checked for the image locally.
 2. Since it was unavailable, Docker downloaded it from Docker Hub.
 3. Docker created a container from the image.
 4. The container ran successfully and displayed a welcome message.
 
 ---
 
-## Task 3: Run Real Containers
+# Task 3: Run Real Containers
 
-### Run Ubuntu Container in Interactive Mode
+## Run Ubuntu Container in Interactive Mode
 
 Command used:
 
@@ -127,7 +136,7 @@ Command used:
 docker run -it --name my-ubuntu ubuntu bash
 ```
 
-Commands explored inside container:
+Commands explored inside the container:
 
 ```bash
 pwd
@@ -135,11 +144,11 @@ ls
 cat /etc/os-release
 ```
 
-This helped me understand that a container behaves like a lightweight Linux environment.
+This helped me understand that a container behaves like a lightweight Linux machine.
 
 ---
 
-### Run Nginx Container
+## Run Nginx Container
 
 Command used:
 
@@ -147,69 +156,47 @@ Command used:
 docker run -d --name my-nginx -p 80:80 nginx
 ```
 
-Explanation:
+### Explanation
 
-* `-d` → Runs container in detached mode (background)
-* `--name` → Assigns a custom container name
-* `-p 80:80` → Maps host port 80 to container port 80
+* `-d` runs the container in detached mode (background)
+* `--name` gives a custom container name
+* `-p 80:80` maps host port 80 to container port 80
 
 I accessed the Nginx webpage using my EC2 public IP in the browser.
 
 ---
 
-### List Running Containers
-
-Command:
+## List Running Containers
 
 ```bash
 docker ps
 ```
 
----
-
-### List All Containers
-
-Command:
+## List All Containers
 
 ```bash
 docker ps -a
 ```
 
----
-
-### Check Logs of Running Container
-
-Command:
+## Check Container Logs
 
 ```bash
 docker logs my-nginx
 ```
 
----
-
-### Execute Command Inside Running Container
-
-Command:
+## Execute Commands Inside Running Container
 
 ```bash
 docker exec -it my-nginx sh
 ```
 
----
-
-### Stop a Container
-
-Command:
+## Stop a Container
 
 ```bash
 docker stop my-nginx
 ```
 
----
-
-### Remove a Container
-
-Command:
+## Remove a Container
 
 ```bash
 docker rm my-nginx
@@ -217,19 +204,19 @@ docker rm my-nginx
 
 ---
 
-## Task 4: Key Learnings
+# Key Learnings
 
-### Detached Mode
+## Detached Mode (`-d`)
 
-Using `-d` runs containers in the background without blocking the terminal.
+Runs the container in the background.
 
-### Interactive Mode
+## Interactive Mode (`-it`)
 
-Using `-it` allows interaction with a container like a mini Linux machine.
+Allows interaction with the container like a mini Linux environment.
 
-### Port Mapping
+## Port Mapping (`-p`)
 
-Using `-p host:container` allows applications inside containers to be accessed externally.
+Maps a host port to a container port.
 
 Example:
 
@@ -237,32 +224,32 @@ Example:
 -p 80:80
 ```
 
-### Custom Naming
+## Custom Naming (`--name`)
 
-Using `--name` makes containers easier to identify and manage.
+Makes containers easier to identify and manage.
 
 ---
 
-## Why Docker Matters for DevOps
+# Why Docker Matters for DevOps
 
-Docker is a key technology in modern DevOps because it provides consistent environments across development, testing, and production.
+Docker is a foundational technology in modern DevOps.
 
 It is widely used in:
 
-* CI/CD Pipelines
-* Microservices Architecture
+* CI/CD pipelines
+* Microservices architecture
 * Kubernetes
-* Cloud Deployments
+* Cloud deployments
 
-Docker helps reduce dependency issues and makes deployments faster and more reliable.
+Docker helps ensure consistency across environments and reduces dependency issues.
 
 ---
 
-## Screenshots
+# Screenshots
 
 1. Docker installation and Hello World container
 2. Ubuntu container in interactive mode
 3. Running and stopped containers (`docker ps` and `docker ps -a`)
 4. Nginx container and webpage
-5. Container logs and container exec
-6. Container cleanup (stop and remove)
+5. Container logs and exec
+6. Container cleanup
