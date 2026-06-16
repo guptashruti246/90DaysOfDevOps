@@ -1,0 +1,20 @@
+Day 29: Introduction to DockerTask 1: What is Docker?What is a container and why do we need them?A container is a lightweight, standalone, and executable package that includes everything needed to run a piece of software. This includes the code, runtime, system tools, libraries, and settings.We need containers to solve the "it works on my machine" problem. They guarantee that software runs the exact same way regardless of the environment (development, staging, or production) by isolating the application from the underlying infrastructure.Containers vs Virtual MachinesVirtual Machines (VMs): Each VM includes a full copy of an operating system, the application, necessary binaries, and libraries. This takes up tens of GBs. VMs run on a Hypervisor and have slow boot times.Containers: Containers share the host machine's OS kernel and isolate the guest processes. They do not need an entire guest OS, making them lightweight (MBs), highly efficient, and capable of booting instantly.Docker ArchitectureDocker uses a client-server architecture. It consists of five primary components:Docker Daemon (dockerd): The background service running on the host that manages Docker objects like images, containers, networks, and volumes.Docker Client (docker): The primary command-line interface (CLI) way users interact with Docker. When you type docker run, the client sends these commands to the daemon.Docker Images: Read-only templates with instructions for creating a Docker container.Docker Containers: Runnable instances of a Docker image. You can start, stop, move, or delete a container using the Docker API or CLI.Docker Registry: A centralized repository used to store and share Docker images (e.g., Docker Hub).[ Docker Client ]  --->  [ Docker Daemon (Host) ]  ---> [ Docker Registry ]
+  (docker run)             - Manages Images               (Docker Hub)
+                           - Manages Containers
+Task 2: Install Docker & VerificationVerify Installationbashdocker --version
+Use code with caution.Run Hello-World Containerbashdocker run hello-world
+Use code with caution.What happened behind the scenes:The Docker client contacted the Docker daemon.The Docker daemon searched for the hello-world image locally and could not find it.The daemon pulled the image from Docker Hub.The daemon created a new container from that image which runs the executable that produces the output.The daemon streamed that output to the Docker client, which sent it to your terminal.Task 3: Run Real ContainersRun Nginx Web Serverbashdocker run -d -p 8080:80 --name my-web-server nginx
+Use code with caution.Note: Open http://localhost:8080 in your web browser to see the "Welcome to nginx!" page.Run Interactive Ubuntu Containerbashdocker run -it ubuntu /bin/bash
+Use code with caution.Inside the container exploration:bashroot@f3a2b1c0d4e9:/# uname -a
+root@f3a2b1c0d4e9:/# exit
+Use code with caution.List ContainersList only active running containers:bashdocker ps
+Use code with caution.List all containers (including stopped ones):bashdocker ps -a
+Use code with caution.Stop and Remove a Containerbash# Stop the container
+docker stop my-web-server
+
+# Remove the container
+docker rm my-web-server
+Use code with caution.Task 4: Advanced ExplorationDetached Mode (-d) vs Foreground ModeRunning a container without -d locks your terminal session to the container's standard output stream. Detached mode (-d) runs the container in the background, prints the unique Container ID, and frees up your terminal instantly.Custom Naming and Port Mappingbashdocker run -d --name custom-app-nginx -p 9000:80 nginx
+Use code with caution.--name custom-app-nginx: Overrides the random name generator.-p 9000:80: Maps port 9000 on your host machine to port 80 inside the container.Check Container Logsbashdocker logs custom-app-nginx
+Use code with caution.Execute Commands Inside a Running ContainerTo run a command inside your background container without spawning an entire interactive shell session:bashdocker exec custom-app-nginx ls -la /etc/nginx
+Use code with caution.
