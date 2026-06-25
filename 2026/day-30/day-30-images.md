@@ -1,4 +1,5 @@
-# Day 30 - Docker Images & Container Lifecycle
+
+# Day 30 – Docker Images & Container Lifecycle
 
 ## Task 1: Docker Images
 
@@ -16,11 +17,10 @@ sudo docker pull alpine
 sudo docker images
 ```
 
-### Observation
+### Compare Ubuntu vs Alpine
 
-* `alpine` is significantly smaller because it is a minimal Linux distribution designed specifically for containers.
-* `ubuntu` contains many additional packages and utilities, making it larger.
-* `nginx` includes the web server binaries and dependencies.
+* **Ubuntu** is larger because it includes many packages and utilities.
+* **Alpine** is much smaller because it is a lightweight Linux distribution designed for containers.
 
 ### Inspect an Image
 
@@ -28,26 +28,32 @@ sudo docker images
 sudo docker inspect nginx
 ```
 
+This command shows metadata such as:
+
+* Image ID
+* Environment Variables
+* Layers
+* Architecture
+* Creation Date
+
 ### Remove Images
 
 ```bash
-sudo docker rmi alpine:latest
-sudo docker rmi nginx:latest
-sudo docker rmi ubuntu:latest
+sudo docker rmi alpine
+sudo docker rmi nginx
+sudo docker rmi ubuntu
 ```
 
-Docker prevented deletion of the Ubuntu image because it was associated with a stopped container.
-
-Remove the stopped container first:
+If an image is attached to a stopped container:
 
 ```bash
-sudo docker rm fcbbef417d93
-sudo docker rmi ubuntu:latest
+sudo docker rm <container_id>
+sudo docker rmi ubuntu
 ```
 
 ---
 
-## Task 2: Image Layers
+## Task 2: Docker Image Layers
 
 ### View Image History
 
@@ -55,16 +61,15 @@ sudo docker rmi ubuntu:latest
 sudo docker image history nginx
 ```
 
-### Observation
+### Observations
 
-Docker images are built using layers. Each layer represents a change made to the image, such as installing packages or copying files.
+* Each line in the output represents a layer.
+* Layers help Docker:
 
-Benefits of layers:
-
-* Faster image builds
-* Layer caching
-* Reduced storage consumption
-* Efficient image sharing
+  * Reuse cached data
+  * Build images faster
+  * Reduce storage usage
+  * Share common layers between images
 
 ---
 
@@ -74,6 +79,12 @@ Benefits of layers:
 
 ```bash
 sudo docker create ubuntu
+```
+
+### Check Status
+
+```bash
+sudo docker ps -a
 ```
 
 ### Start Container
@@ -98,39 +109,45 @@ sudo docker unpause <container_id>
 
 ```bash
 sudo docker stop <container_id>
-```
 
 ### Restart Container
 
+
 ```bash
 sudo docker restart <container_id>
+
 ```
 
 ### Kill Container
 
 ```bash
+
 sudo docker kill <container_id>
 ```
 
+
 ### Remove Container
 
+
 ```bash
+
 sudo docker rm <container_id>
 ```
 
-### Check Container States
 
+### View Container States
+
+```bash
 sudo docker ps -a
+
 ```
 
-
-> Note: Screenshots for Task 3 were intentionally skipped. The commands were executed and observed during practice.
-
+**Note:** Screenshots for Task 3 were skipped.
 
 ---
 
-## Task 4: Working with Running Containers
 
+## Task 4: Working with Running Containers
 
 ### Run Nginx Container
 
@@ -138,14 +155,11 @@ sudo docker ps -a
 sudo docker run -d nginx
 ```
 
-
 ### View Logs
 
 ```bash
 sudo docker logs <container_id>
-
 ```
-
 
 ### Follow Logs in Real Time
 
@@ -153,16 +167,19 @@ sudo docker logs <container_id>
 sudo docker logs -f <container_id>
 ```
 
-Press `Ctrl + C` to exit.
+Exit logs:
 
-### Enter Container
+```text
+Ctrl + C
+```
 
+### Access Container Shell
 
 ```bash
 sudo docker exec -it <container_id> sh
 ```
 
-### Run a Single Command Inside Container
+### Execute Single Command
 
 ```bash
 sudo docker exec <container_id> ls /usr/share/nginx/html
@@ -186,7 +203,7 @@ sudo docker inspect -f '{{.NetworkSettings.IPAddress}}' <container_id>
 sudo docker port <container_id>
 ```
 
-No output was displayed because the container was started without publishing any ports.
+No output was shown because the container was started without exposing ports.
 
 ### Check Mounts
 
@@ -204,7 +221,7 @@ sudo docker inspect -f '{{json .Mounts}}' <container_id>
 sudo docker stop $(sudo docker ps -q)
 ```
 
-### Remove All Stopped Containers
+### Remove Stopped Containers
 
 ```bash
 sudo docker container prune -f
@@ -224,38 +241,37 @@ sudo docker system df
 
 ---
 
-## Screenshots
+# Screenshots
 
-### SS1 – Docker Images
+## SS1 – Docker Images
 
 ![Docker Images](screenshots/docker-images.png)
 
 ---
 
-### SS2 – Nginx Image History
+## SS2 – Nginx Image History
 
-![Image History](screenshots/nginx-image-history.png)
-
----
-
-### SS3 – Container Logs
-
-![Container Logs](screenshots/nginx-running.png)
+![Image History](screenshots/image-history.png)
 
 ---
 
-### SS4 – Docker Disk Usage
+## SS3 – Container Logs
 
-![Docker System DF](screenshots/docker-disk-usgae.png)
+![Container Logs](screenshots/nginx-running%20.png)
 
 ---
 
-## Key Learnings
+## SS4 – Docker Disk Usage
 
-* Docker images are immutable templates.
+![Docker Disk Usage](screenshots/docker-disk-usage.png)
+
+---
+
+# Key Learnings
+
+* Docker images are templates.
 * Containers are running instances of images.
-* Docker layers enable efficient storage and caching.
-* Containers transition through different states during their lifecycle.
-* Docker provides commands to inspect, monitor, and clean up resources efficiently.
-
+* Docker layers improve storage efficiency and caching.
+* Containers move through different states during their lifecycle.
+* Docker provides commands to inspect, monitor, and clean up resources effectively.
 
