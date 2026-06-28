@@ -30,15 +30,13 @@ sudo docker build -t my-ubuntu:v1 .
 sudo docker run my-ubuntu:v1
 ```
 
-### Verification
+### Output
 
-The container successfully printed:
-
-```text
 Hello from my custom image!
-```
 
-📷 **Screenshot:** `task1-output.png`
+### Screenshot
+
+![Task 1 Output](screenshots/task1-output.png)
 
 ---
 
@@ -60,17 +58,6 @@ EXPOSE 8080
 CMD ["cat","app.txt"]
 ```
 
-### Understanding Each Instruction
-
-| Instruction | Description                                    |
-| ----------- | ---------------------------------------------- |
-| `FROM`      | Uses Ubuntu as the base image.                 |
-| `RUN`       | Executes commands during image build.          |
-| `WORKDIR`   | Sets `/app` as the working directory.          |
-| `COPY`      | Copies `app.txt` from the host into the image. |
-| `EXPOSE`    | Documents that the application uses port 8080. |
-| `CMD`       | Runs `cat app.txt` when the container starts.  |
-
 ### Build
 
 ```bash
@@ -83,7 +70,22 @@ sudo docker build -t docker-demo:v1 .
 sudo docker run docker-demo:v1
 ```
 
-📷 **Screenshot:** `task2-output.png`
+### Screenshot
+
+![Task 2 Output](screenshots/task2-output.png)
+
+---
+
+## Dockerfile Instructions Explained
+
+| Instruction | Description                    |
+| ----------- | ------------------------------ |
+| FROM        | Base image                     |
+| RUN         | Executes commands during build |
+| COPY        | Copies files into image        |
+| WORKDIR     | Sets working directory         |
+| EXPOSE      | Documents port                 |
+| CMD         | Default command                |
 
 ---
 
@@ -93,74 +95,42 @@ sudo docker run docker-demo:v1
 
 ```dockerfile
 FROM ubuntu
-
 CMD ["echo","hello"]
 ```
 
-Running:
+* Default command can be overridden
+* Example:
 
 ```bash
-sudo docker run cmd-demo:v1
+docker run cmd-demo:v1 ls
 ```
 
-Output:
-
-```text
-hello
-```
-
-Running:
-
-```bash
-sudo docker run cmd-demo:v1 ls
-```
-
-Docker ignored the default `CMD` and executed `ls` instead.
+---
 
 ### ENTRYPOINT
 
 ```dockerfile
 FROM ubuntu
-
 ENTRYPOINT ["echo"]
 ```
 
-Running:
+* Fixed command
+* Only arguments change
+
+Example:
 
 ```bash
-sudo docker run entry-demo:v1 hello
+docker run entry-demo:v1 hello
+docker run entry-demo:v1 Docker Rocks!
 ```
-
-Output:
-
-```text
-hello
-```
-
-Running:
-
-```bash
-sudo docker run entry-demo:v1 Docker Rocks!
-```
-
-Output:
-
-```text
-Docker Rocks!
-```
-
-### When would you use CMD vs ENTRYPOINT?
-
-* **CMD** is used when you want to provide a default command that users can override.
-* **ENTRYPOINT** is used when the container should always run the same executable, while allowing additional arguments to be passed.
 
 ---
 
-## Task 4: Build a Simple Web App Image
+## Task 4: Nginx Web App
 
 ### index.html
 
-A simple static HTML page.
+Simple static webpage served using Nginx.
 
 ### Dockerfile
 
@@ -184,55 +154,37 @@ sudo docker build -t my-website:v1 .
 sudo docker run -d -p 8080:80 my-website:v1
 ```
 
-### Port Mapping
+### Access
 
-* **8080** → Host (EC2) port
-```text
+```
 http://<EC2-Public-IP>:8080
+```
 
+### Screenshot
+
+![Task 4 Output](screenshots/task4-output.png)
 
 ---
 
 ## Task 5: .dockerignore
 
-
 ```text
 .git
 *.md
 .env
+node_modules
 ```
 
-### Observation
+### Purpose
 
+Excludes unnecessary files from Docker build context to make builds faster and images smaller.
 
 ---
+
 ## Task 6: Build Optimization
 
-### Observation
+Docker uses **layer caching**.
 
-Docker reused cached image layers during rebuilds when no changes were made.
+If a layer does not change, Docker reuses it instead of rebuilding.
 
-### Why does layer order matter?
-
-
----
-
-## Key Takeaways
-
-* Built custom Docker images using Dockerfiles.
-* Learned the purpose of common Dockerfile instructions.
-* Understood the difference between `CMD` and `ENTRYPOINT`.
-* Built and deployed a static website using Nginx.
-* Used `.dockerignore` to optimize the build context.
-* Learned how Docker layer caching speeds up image builds.
-Docker builds images layer by layer. If a layer has not changed, Docker reuses the cached version instead of rebuilding it. Placing frequently changing instructions near the end of the Dockerfile improves build performance because only the modified layers need to be rebuilt.
-
-The `.dockerignore` file excludes unnecessary files from the Docker build context, reducing build time, keeping images smaller, and preventing sensitive files from being copied into the image.
-node_modules
-### .dockerignore
-📷 **Screenshot:** `task4-output.png`
-```
-
-The website was successfully accessed in the browser using:
-* **80** → Container (Nginx) port
 
